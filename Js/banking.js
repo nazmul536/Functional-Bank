@@ -15,10 +15,18 @@ function updateTotalField(totalFieldId, ammount) {
     totalElement.innerText = previousTotalText + ammount;
 }
 
-function updateBalance(ammount, isAdd) {
+function getCurrentBalance() {
     const balanceTotal = document.getElementById('balance-total');
     const balanceTotalText = balanceTotal.innerText;
     const previousBalanceTotal = parseFloat(balanceTotalText);
+    return previousBalanceTotal;
+}
+
+function updateBalance(ammount, isAdd) {
+    const balanceTotal = document.getElementById('balance-total');
+    /*     const balanceTotalText = balanceTotal.innerText;
+        const previousBalanceTotal = parseFloat(balanceTotalText); */
+    const previousBalanceTotal = getCurrentBalance();
     if (isAdd == true) {
         balanceTotal.innerText = previousBalanceTotal + ammount;
     }
@@ -49,8 +57,11 @@ document.getElementById('deposit-button').addEventListener('click', function () 
         const previousBalanceTotal = parseFloat(balanceTotalText);
         balanceTotal.innerText = previousBalanceTotal + depositAmmount; */
     const depositAmmount = getInputValue('deposit-input');
-    updateTotalField('deposit-total', depositAmmount);
-    updateBalance(depositAmmount, true);
+    if (depositAmmount > 0) {
+        updateTotalField('deposit-total', depositAmmount);
+        updateBalance(depositAmmount, true);
+    }
+
 });
 
 //handle withdraw button
@@ -76,8 +87,14 @@ document.getElementById('withdraw-button').addEventListener('click', function ()
   
       balanceTotal.innerText = previousBalanceTotal - withdrawAmmount; */
     const withdrawAmmount = getInputValue('withdraw-input');
-    updateTotalField('withdraw-total', withdrawAmmount)
-    updateBalance(withdrawAmmount, false);
+    const currentBalance = getCurrentBalance();
+    if (withdrawAmmount > 0 && withdrawAmmount < currentBalance) {
+        updateTotalField('withdraw-total', withdrawAmmount)
+        updateBalance(withdrawAmmount, false);
+    }
+    if (withdrawAmmount.currentBalance) {
+        console.log('You cannot withdraw money')
+    }
 
 
 })
